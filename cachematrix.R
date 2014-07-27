@@ -1,15 +1,46 @@
-## Put comments here that give an overall description of what your
-## functions do
+#Takes a matrix and returns a list.
+makeCacheMatrix <- function(cacheMe = matrix()) 
+{
+	cachedMatrix <- NULL
+	
+	#Workhorse functions in the object.
+	set <- function (matrix)
+	{
+	  cacheMe <<- matrix
+	  cachedMatrix <- NULL
+	}
 
-## Write a short comment describing this function
+	get <- function ()
+	{
+	  return(cacheMe)
+	}
 
-makeCacheMatrix <- function(x = matrix()) {
+	setInversion <- function (cache)
+	{
+	  cachedMatrix <<- cache
+	}
 
+	getInversion <- function ()
+	{
+	  return(cachedMatrix)
+	}
+
+	list(set = set, get = get, setInversion = setInversion, getInversion = getInversion)
 }
 
 
-## Write a short comment describing this function
+#Checks to see if a function has already been cached. If it has, return the value. If not, cache it.
+cacheSolve <- function (x, ...)
+{
+	result <- x$getInversion()
+	if (!is.null(result))
+	{
+	  message("Obtaining cache")
+	  return(result)
+	}
 
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+	message("Generating cache.")
+	result <- solve(x$get(), ...)
+	x$setInversion(result)
+	return(result)
 }
